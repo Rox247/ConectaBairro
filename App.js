@@ -1,9 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { Button } from 'react-native';
-
-
+import { Button, Text, View } from 'react-native';
 
 import HomeScreen from './src/screens/HomeScreen';
 import InformativosScreen from './src/screens/InformativosScreen';
@@ -18,42 +16,58 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getUserRole().finally(() => setLoading(false));
-    
-  }, []);
-
-  if (loading) return null;
   const [role, setRole] = useState(null);
 
+  useEffect(() => {
+    async function carregar() {
+      const r = await getUserRole();
+      setRole(r);
+      setLoading(false);
+    }
+    carregar();
+  }, []);
+
+  if (loading) {
+    return null; // OK — hooks já foram declarados antes
+  }
 
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName={role ? 'Home' : 'Login'}
         screenOptions={({ navigation }) => ({
-          headerRight: () => (
-            <Button
-              title="Sair"
-              color="pink"
-              onPress={async () => {
-                await clearUserRole();
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: 'Login' }],
-                });
-              }}
-            />
+          headerTitle: () => (
+            <View style={{ alignItems: 'center' }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+                Conecta Bairro
+              </Text>
+              {role && (
+                <Text style={{ fontSize: 12 }}>
+                  Logado como: {role === 'admin' ? 'Administrador' : 'Morador'}
+                </Text>
+              )}
+            </View>
           ),
+          headerRight: () =>
+            role ? (
+              <Button
+                title="Sair"
+                onPress={async () => {
+                  await clearUserRole();
+                  setRole(null);
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Login' }],
+                  });
+                }}
+              />
+            ) : null,
         })}
       >
-        {/* LOGIN — sem botão sair */}
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerRight: () => null }}
-        />
+        <Stack.Screen name="Login">
+  {props => <LoginScreen {...props} setRole={setRole} />}
+</Stack.Screen>
+
 
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Informativos" component={InformativosScreen} />

@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// ---------- USER ROLE ----------
+// =============================
+// USER ROLE
+// =============================
 const USER_ROLE_KEY = '@user_role';
 
 export async function setUserRole(role) {
@@ -15,7 +17,9 @@ export async function clearUserRole() {
   await AsyncStorage.removeItem(USER_ROLE_KEY);
 }
 
-// ---------- INFORMATIVOS ----------
+// =============================
+// INFORMATIVOS
+// =============================
 const INFORMATIVOS_KEY = '@informativos';
 
 export async function getInformativos() {
@@ -26,26 +30,33 @@ export async function getInformativos() {
 export async function saveInformativo(informativo) {
   const informativos = await getInformativos();
   informativos.unshift(informativo);
-  await AsyncStorage.setItem(INFORMATIVOS_KEY, JSON.stringify(informativos));
+  await AsyncStorage.setItem(
+    INFORMATIVOS_KEY,
+    JSON.stringify(informativos)
+  );
 }
-
-// ---------- INFORMATIVOS (EXTRA) ----------
 
 export async function deleteInformativo(index) {
   const informativos = await getInformativos();
   informativos.splice(index, 1);
-  await AsyncStorage.setItem('@informativos', JSON.stringify(informativos));
+  await AsyncStorage.setItem(
+    INFORMATIVOS_KEY,
+    JSON.stringify(informativos)
+  );
 }
 
 export async function updateInformativo(index, novoInformativo) {
   const informativos = await getInformativos();
   informativos[index] = novoInformativo;
-  await AsyncStorage.setItem('@informativos', JSON.stringify(informativos));
+  await AsyncStorage.setItem(
+    INFORMATIVOS_KEY,
+    JSON.stringify(informativos)
+  );
 }
 
-
-
-// ---------- OCORRÊNCIAS ----------
+// =============================
+// OCORRÊNCIAS
+// =============================
 const OCORRENCIAS_KEY = '@ocorrencias';
 
 export async function getOcorrencias() {
@@ -56,19 +67,26 @@ export async function getOcorrencias() {
 export async function saveOcorrencia(ocorrencia) {
   const ocorrencias = await getOcorrencias();
   ocorrencias.unshift(ocorrencia);
-  await AsyncStorage.setItem(OCORRENCIAS_KEY, JSON.stringify(ocorrencias));
+  await AsyncStorage.setItem(
+    OCORRENCIAS_KEY,
+    JSON.stringify(ocorrencias)
+  );
 }
-
-// ---------- OCORRÊNCIAS (EXTRA) ----------
 
 export async function deleteOcorrencia(index) {
   const ocorrencias = await getOcorrencias();
   ocorrencias.splice(index, 1);
-  await AsyncStorage.setItem('@ocorrencias', JSON.stringify(ocorrencias));
+  await AsyncStorage.setItem(
+    OCORRENCIAS_KEY,
+    JSON.stringify(ocorrencias)
+  );
 }
 
 export async function updateOcorrencia(index, novaOcorrencia) {
   const ocorrencias = await getOcorrencias();
   ocorrencias[index] = novaOcorrencia;
-  await AsyncStorage.setItem('@ocorrencias', JSON.stringify(ocorrencias));
+  await AsyncStorage.setItem(
+    OCORRENCIAS_KEY,
+    JSON.stringify(ocorrencias)
+  );
 }

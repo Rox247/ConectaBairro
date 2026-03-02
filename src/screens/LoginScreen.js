@@ -1,13 +1,12 @@
 import { Button, View } from 'react-native';
 import { setUserRole } from '../services/storage';
 
-export default function LoginScreen({ navigation }) {
-  async function login(role) {
-    await setUserRole(role);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Home' }],
-    });
+export default function LoginScreen({ navigation, setRole }) {
+
+  async function login(tipo) {
+    await setUserRole(tipo);
+    setRole(tipo);
+    navigation.replace('Home');
   }
 
   return (
@@ -16,6 +15,7 @@ export default function LoginScreen({ navigation }) {
         title="Entrar como Morador"
         onPress={() => login('morador')}
       />
+
       <Button
         title="Entrar como Administrador"
         onPress={() => login('admin')}
